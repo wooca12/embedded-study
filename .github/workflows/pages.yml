@@ -18,6 +18,17 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v6
+      - name: Version browser assets
+        run: |
+          python3 - <<'PYTHON'
+          import os
+          from pathlib import Path
+          page = Path('web/index.html')
+          text = page.read_text()
+          for asset in ('style.css', 'curriculum.js', 'app.js', 'figures.js', 'notes.js'):
+              text = text.replace(f'"{asset}"', f'"{asset}?v={os.environ["GITHUB_SHA"]}"')
+          page.write_text(text)
+          PYTHON
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
