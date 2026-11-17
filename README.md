@@ -8,15 +8,26 @@ C 기초 문법을 아는 입문자를 위한 임베디드 학습 웹입니다.
 
 설치나 로그인 없이 링크를 열어 예습·실습 안내·복습·발표 연습·블로그 정리를 사용할 수 있습니다. 챗봇이나 API 연결은 없으며 개인 개념 정리를 직접 작성할 수 있습니다.
 
-## Day 01
+## 오늘의 주제: Memory-mapped I/O와 GPIO 제어
 
-NUCLEO-F103RB / STM32F103RB. PDF의 7개 장을 강의 예습 10단계로 정리했습니다. 개요 → 개발환경 → 클럭·핀·프로젝트 설정 → LED → 버튼 → UART → 표준 입출력 → 도전 과제 순서입니다. C 포인터·MMIO·레지스터는 보충 2단계로 구분합니다.
+NUCLEO-F103RB / STM32F103RB 기준으로 ‘C 코드가 핀 전압을 바꾸는 과정’을 이해합니다. 강의 목차 전체를 옮기지 않고 다음 순서로 재구성했습니다.
 
-- [강의 대응표](docs/lecture-map.md)
+1. 코드에서 LED까지 큰 그림
+2. C 주소·포인터·비트 마스크
+3. MMIO와 주변장치 레지스터
+4. GPIO 입력·출력·풀업·출력 방식
+5. 클럭 허용과 핀 모드 설정
+6. ODR·BSRR·HAL 출력
+7. IDR·버튼 입력·폴링
+8. 개념 연결과 실습 결과 설명
+
+8단계 개념·기초 질문·복습·랜덤 발표와 비트 연습·LED·버튼 실험을 제공합니다. UART·printf/scanf 등 오늘 범위 밖의 내용은 학습 흐름에서 제외했습니다.
+
+- [주제 구성과 참고 자료](docs/lecture-map.md)
 - [Mac 설치 안내](docs/mac-setup.md)
 - [기술 출처](docs/sources.md)
-- [MMIO 보충 코드 안내](studies/01-mmio-gpio/README.md)
-- [Day 1 강의 PDF](web/private/day1/day1-firmware.pdf)
+- [MMIO 실습 코드 안내](studies/01-mmio-gpio/README.md)
+- [기존 강의 PDF 원본](web/private/day1/day1-firmware.pdf)
 
 ## 개인 기록
 
