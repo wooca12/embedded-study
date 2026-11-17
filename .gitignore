@@ -1,0 +1,19 @@
+.DS_Store
+*.pdf
+*.dmg
+*.zip
+.metadata/
+Debug/
+Release/
+
+# Share only Day 1 materials in the private study repository
+web/private/*
+!web/private/day1/
+!web/private/day1/day1-firmware.pdf
+.env
+.env.*
+!.env.example
+__pycache__/
+
+# Browser learning-record backups
+embedded-study-day1*.json
