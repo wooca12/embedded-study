@@ -1,0 +1,16 @@
+'use strict';
+(() => {
+  const make=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e;};
+  const button=(text,fn)=>{const b=make('button','',text);b.type='button';b.onclick=fn;return b;};
+  let editing=null,lesson=0;
+  const editor=make('dialog','note-editor');
+  editor.innerHTML='<form id="note-form"><div class="note-editor-head"><h3>내 개념 정리</h3><button type="button" id="note-cancel" aria-label="정리 창 닫기">×</button></div><p id="note-context" class="muted"></p><label for="note-question">제목 또는 궁금했던 점</label><textarea id="note-question" rows="2" maxlength="4000" required></textarea><label for="note-summary">내 말로 정리한 내용</label><textarea id="note-summary" rows="10" maxlength="20000" required></textarea><div class="actions"><button type="submit">저장</button></div></form>';
+  document.body.append(editor);editor.querySelector('#note-cancel').onclick=()=>editor.close();
+  function edit(i,n){lesson=i;editing=n;editor.querySelector('#note-context').textContent=lessons[i].title;editor.querySelector('#note-question').value=n?.question||'';editor.querySelector('#note-summary').value=n?.summary||'';editor.showModal();}
+  editor.querySelector('form').onsubmit=e=>{e.preventDefault();const question=editor.querySelector('#note-question').value.trim(),summary=editor.querySelector('#note-summary').value.trim();if(!question||!summary)return;const note=editing||{id:crypto.randomUUID(),turnId:'manual',lesson,createdAt:new Date().toISOString()};Object.assign(note,{question,summary});if(!editing)state.conceptNotes.push(note);save();render();editor.close();};
+  const slots=[...document.querySelectorAll('.lesson')].map((card,i)=>{const area=make('section','concept-notes');area.setAttribute('aria-label',lessons[i].title+' 개인 정리');card.insertBefore(area,card.querySelector('fieldset'));return area;});
+  const markdown=n=>`### ${n.question}\n\n${n.summary}`;
+  function render(){slots.forEach((slot,i)=>{slot.replaceChildren();const bar=make('div','concept-note-bar');bar.append(make('span','muted','공부하며 이해한 내용을 직접 남겨보세요.'),button('내 정리 추가',()=>edit(i)));slot.append(bar);for(const n of state.conceptNotes.filter(n=>n.lesson===i)){const item=make('div','concept-note');item.append(make('h4','',n.question),make('p','note-body',n.summary));const actions=make('div','actions');actions.append(button('수정',()=>edit(i,n)),button('블로그 초안에 추가',()=>{const blog=document.querySelector('#blog');const text=`## 내 개념 정리 · ${lessons[i].title}\n\n${markdown(n)}`;if(blog.value.includes(text)){status('이미 같은 정리가 초안에 있어요.');return;}blog.value+='\n\n'+text+'\n';blog.dispatchEvent(new Event('input'));status('블로그 초안에 추가했어요.');}),button('삭제',()=>{if(!confirm('이 개인 정리를 삭제할까요?'))return;state.conceptNotes=state.conceptNotes.filter(x=>x.id!==n.id);save();render();}));item.append(actions);slot.append(item);}});}
+  render();
+  document.querySelector('#download-blog').parentElement.append(button('개념 정리 내려받기 (.md)',()=>{const text=lessons.map((l,i)=>{const notes=state.conceptNotes.filter(n=>n.lesson===i);return notes.length?`## ${l.title}\n\n${notes.map(markdown).join('\n\n')}`:'';}).filter(Boolean).join('\n\n');if(!text){status('아직 저장한 개인 정리가 없어요.');return;}download('day01-concepts.md','# 내 개념 정리\n\n'+text,'text/markdown;charset=utf-8');}));
+})();

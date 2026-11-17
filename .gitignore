@@ -6,7 +6,7 @@
 Debug/
 Release/
 
-# Share only Day 1 materials in the private study repository
+# Share only Day 1 materials in the study repository
 web/private/*
 !web/private/day1/
 !web/private/day1/day1-firmware.pdf
